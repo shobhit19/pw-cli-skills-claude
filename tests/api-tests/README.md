@@ -50,11 +50,10 @@ environment that does enforce auth, heal those specific assertions to expect `40
 ## Verification status
 
 These tests were generated without live network access to `petstore3.swagger.io` — this sandbox's
-egress policy blocks it (same restriction as `codemify.com` and `*.atlassian.net`, see
-`jira/README.md`). The suite parses and lists correctly (`npx playwright test --project=api
---list`), and the schema-validation logic was sanity-checked offline against hand-built payloads,
-but the tests have **not been run against the live API**. Run them once in an environment with
-network access and heal any failures per the plan/generate/heal workflow in
+egress policy blocks outbound access to it. The suite parses and lists correctly (`npx playwright
+test --project=api --list`), and the schema-validation logic was sanity-checked offline against
+hand-built payloads, but the tests have **not been run against the live API**. Run them once in an
+environment with network access and heal any failures per the plan/generate/heal workflow in
 `.claude/skills/playwright-cli/references/test-generation.md` §3:
 
 ```bash
