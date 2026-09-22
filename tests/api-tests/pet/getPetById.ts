@@ -12,7 +12,7 @@ export class GetPetByIdEndpoint extends BaseApi {
     petId: number | string,
     options: { auth?: boolean } = { auth: true },
   ): Promise<APIResponse> {
-    return this.request.get(`/pet/${petId}`, {
+    return this.request.get(`pet/${petId}`, {
       headers: options.auth === false ? {} : { api_key: 'test-api-key' },
     });
   }

@@ -8,6 +8,6 @@ export class LogoutUserEndpoint extends BaseApi {
   }
 
   async send(): Promise<APIResponse> {
-    return this.request.get('/user/logout');
+    return this.request.get('user/logout');
   }
 }

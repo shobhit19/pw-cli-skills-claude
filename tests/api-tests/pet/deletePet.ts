@@ -11,7 +11,7 @@ export class DeletePetEndpoint extends BaseApi {
     petId: number | string,
     options: { auth?: boolean } = { auth: true },
   ): Promise<APIResponse> {
-    return this.request.delete(`/pet/${petId}`, {
+    return this.request.delete(`pet/${petId}`, {
       headers: options.auth === false ? {} : { Authorization: 'Bearer test-token' },
     });
   }

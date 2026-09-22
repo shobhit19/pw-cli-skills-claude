@@ -10,6 +10,6 @@ export class GetOrderByIdEndpoint extends BaseApi {
   }
 
   async send(orderId: number | string): Promise<APIResponse> {
-    return this.request.get(`/store/order/${orderId}`);
+    return this.request.get(`store/order/${orderId}`);
   }
 }

@@ -11,6 +11,6 @@ export class LoginUserEndpoint extends BaseApi {
     const params: Record<string, string> = {};
     if (username !== undefined) params.username = username;
     if (password !== undefined) params.password = password;
-    return this.request.get('/user/login', { params });
+    return this.request.get('user/login', { params });
   }
 }

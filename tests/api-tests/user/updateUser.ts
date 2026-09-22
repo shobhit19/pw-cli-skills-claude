@@ -9,6 +9,6 @@ export class UpdateUserEndpoint extends BaseApi {
   }
 
   async send(username: string, user: Partial<User>): Promise<APIResponse> {
-    return this.request.put(`/user/${username}`, { data: user });
+    return this.request.put(`user/${username}`, { data: user });
   }
 }

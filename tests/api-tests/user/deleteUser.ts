@@ -8,6 +8,6 @@ export class DeleteUserEndpoint extends BaseApi {
   }
 
   async send(username: string): Promise<APIResponse> {
-    return this.request.delete(`/user/${username}`);
+    return this.request.delete(`user/${username}`);
   }
 }

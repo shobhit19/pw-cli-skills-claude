@@ -9,7 +9,7 @@ export class UpdatePetEndpoint extends BaseApi {
   }
 
   async send(pet: Partial<Pet>, options: { auth?: boolean } = { auth: true }): Promise<APIResponse> {
-    return this.request.put('/pet', {
+    return this.request.put('pet', {
       data: pet,
       headers: options.auth === false ? {} : { Authorization: 'Bearer test-token' },
     });

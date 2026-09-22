@@ -12,7 +12,7 @@ export class UpdatePetWithFormEndpoint extends BaseApi {
     params: { name?: string; status?: string },
     options: { auth?: boolean } = { auth: true },
   ): Promise<APIResponse> {
-    return this.request.post(`/pet/${petId}`, {
+    return this.request.post(`pet/${petId}`, {
       params,
       headers: options.auth === false ? {} : { Authorization: 'Bearer test-token' },
     });

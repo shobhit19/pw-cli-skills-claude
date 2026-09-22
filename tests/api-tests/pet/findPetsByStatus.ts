@@ -8,7 +8,7 @@ export class FindPetsByStatusEndpoint extends BaseApi {
   }
 
   async send(status: string, options: { auth?: boolean } = { auth: true }): Promise<APIResponse> {
-    return this.request.get('/pet/findByStatus', {
+    return this.request.get('pet/findByStatus', {
       params: { status },
       headers: options.auth === false ? {} : { Authorization: 'Bearer test-token' },
     });

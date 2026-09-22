@@ -9,6 +9,6 @@ export class CreateUserEndpoint extends BaseApi {
   }
 
   async send(user: Partial<User>): Promise<APIResponse> {
-    return this.request.post('/user', { data: user });
+    return this.request.post('user', { data: user });
   }
 }

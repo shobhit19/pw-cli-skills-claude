@@ -8,7 +8,7 @@ export class GetInventoryEndpoint extends BaseApi {
   }
 
   async send(options: { auth?: boolean } = { auth: true }): Promise<APIResponse> {
-    return this.request.get('/store/inventory', {
+    return this.request.get('store/inventory', {
       headers: options.auth === false ? {} : { api_key: 'test-api-key' },
     });
   }
