@@ -1,0 +1,24 @@
+{
+  "validOrder": {
+    "petId": 198772,
+    "quantity": 1,
+    "shipDate": "2024-01-01T00:00:00.000Z",
+    "status": "placed",
+    "complete": true
+  },
+  "statusEnum": {
+    "valid": ["placed", "approved", "delivered"],
+    "invalid": "cancelled"
+  },
+  "getOrderByIdBoundaries": {
+    "validLowBoundary": 5,
+    "validHighBoundary": 11,
+    "invalidJustAboveLow": 6,
+    "invalidJustBelowHigh": 10
+  },
+  "invalidOrderIdType": "not-a-number",
+  "deleteOrderBoundaries": {
+    "validBelow1000": 999,
+    "invalidAbove1000": 1001
+  }
+}

@@ -5,8 +5,24 @@ export default defineConfig({
   fullyParallel: true,
   reporter: 'html',
   use: {
-    baseURL: 'https://www.saucedemo.com',
     trace: 'on-first-retry',
-    testIdAttribute: 'data-test',
   },
+  projects: [
+    {
+      name: 'ui',
+      testDir: './tests',
+      testIgnore: '**/api-tests/**',
+      use: {
+        baseURL: 'https://www.saucedemo.com',
+        testIdAttribute: 'data-test',
+      },
+    },
+    {
+      name: 'api',
+      testDir: './tests/api-tests',
+      use: {
+        baseURL: 'https://petstore3.swagger.io/api/v3',
+      },
+    },
+  ],
 });

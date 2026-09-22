@@ -1,0 +1,42 @@
+{
+  "validPet": {
+    "name": "doggie",
+    "category": { "id": 1, "name": "Dogs" },
+    "photoUrls": ["https://example.com/photos/doggie.jpg"],
+    "tags": [{ "id": 1, "name": "friendly" }],
+    "status": "available"
+  },
+  "validPetUpdate": {
+    "name": "doggie-updated",
+    "category": { "id": 1, "name": "Dogs" },
+    "photoUrls": ["https://example.com/photos/doggie-updated.jpg"],
+    "tags": [{ "id": 1, "name": "friendly" }],
+    "status": "sold"
+  },
+  "petMissingName": {
+    "photoUrls": ["https://example.com/photos/no-name.jpg"],
+    "status": "available"
+  },
+  "petMissingPhotoUrls": {
+    "name": "no-photos",
+    "status": "available"
+  },
+  "petWithInvalidStatus": {
+    "name": "flying-pig",
+    "photoUrls": ["https://example.com/photos/flying-pig.jpg"],
+    "status": "flying"
+  },
+  "statusEnum": {
+    "valid": ["available", "pending", "sold"],
+    "invalid": "unknown-status"
+  },
+  "existingPetId": 1,
+  "nonExistentPetId": 999999999,
+  "invalidPetIdType": "not-a-number",
+  "updateFormParams": {
+    "name": "form-updated-name",
+    "status": "sold"
+  },
+  "uploadMetadata": "automated-test-upload",
+  "tagsQuery": ["friendly", "trained"]
+}
