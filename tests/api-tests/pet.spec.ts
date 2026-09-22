@@ -2,6 +2,7 @@
 import { test, expect } from '@playwright/test';
 import petData from '../api-data/pet-data.json';
 import { validateSchema } from './utils/schemaValidator';
+import { describeResponse } from './utils/testHelpers';
 import { AddPetEndpoint } from './pet/addPet';
 import { UpdatePetEndpoint } from './pet/updatePet';
 import { FindPetsByStatusEndpoint } from './pet/findPetsByStatus';
@@ -16,7 +17,7 @@ test.describe('Pet API — happy path', () => {
     const addPet = new AddPetEndpoint(request);
     const response = await addPet.send(petData.validPet);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
     expect(body.name).toBe(petData.validPet.name);
 
@@ -31,7 +32,7 @@ test.describe('Pet API — happy path', () => {
     const created = await (await addPet.send(petData.validPet)).json();
     const response = await updatePet.send({ ...petData.validPetUpdate, id: created.id });
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
     expect(body.status).toBe(petData.validPetUpdate.status);
 
@@ -43,7 +44,7 @@ test.describe('Pet API — happy path', () => {
     const findPetsByStatus = new FindPetsByStatusEndpoint(request);
     const response = await findPetsByStatus.send(petData.statusEnum.valid[0]);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
     expect(Array.isArray(body)).toBeTruthy();
   });
@@ -52,7 +53,7 @@ test.describe('Pet API — happy path', () => {
     const findPetsByTags = new FindPetsByTagsEndpoint(request);
     const response = await findPetsByTags.send(petData.tagsQuery);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
     expect(Array.isArray(body)).toBeTruthy();
   });
@@ -64,7 +65,7 @@ test.describe('Pet API — happy path', () => {
     const created = await (await addPet.send(petData.validPet)).json();
     const response = await getPetById.send(created.id);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
     expect(body.id).toBe(created.id);
 
@@ -79,7 +80,7 @@ test.describe('Pet API — happy path', () => {
     const created = await (await addPet.send(petData.validPet)).json();
     const response = await updatePetWithForm.send(created.id, petData.updateFormParams);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
     expect(body.name).toBe(petData.updateFormParams.name);
   });
@@ -91,7 +92,7 @@ test.describe('Pet API — happy path', () => {
     const created = await (await addPet.send(petData.validPet)).json();
     const response = await uploadFile.send(created.id, Buffer.from('fake-image-bytes'), petData.uploadMetadata);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
 
     const { valid, errors } = validateSchema('ApiResponse', body);
@@ -105,7 +106,7 @@ test.describe('Pet API — happy path', () => {
     const created = await (await addPet.send(petData.validPet)).json();
     const response = await deletePet.send(created.id);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 });
 
@@ -114,7 +115,7 @@ test.describe('Pet API — boundary: status enum', () => {
     test(`findPetsByStatus accepts documented enum value "${status}"`, async ({ request }) => {
       const findPetsByStatus = new FindPetsByStatusEndpoint(request);
       const response = await findPetsByStatus.send(status);
-      expect(response.ok()).toBeTruthy();
+      expect(response.ok(), await describeResponse(response)).toBeTruthy();
     });
   }
 });
@@ -162,7 +163,7 @@ test.describe('Pet API — negative cases', () => {
   }) => {
     const addPet = new AddPetEndpoint(request);
     const response = await addPet.send(petData.validPet, { auth: false });
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 
   test('getPetById still succeeds without an api_key header (sandbox does not enforce auth)', async ({ request }) => {
@@ -171,6 +172,6 @@ test.describe('Pet API — negative cases', () => {
 
     const created = await (await addPet.send(petData.validPet)).json();
     const response = await getPetById.send(created.id, { auth: false });
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 });

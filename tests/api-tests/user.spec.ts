@@ -2,6 +2,7 @@
 import { test, expect } from '@playwright/test';
 import userData from '../api-data/user-data.json';
 import { validateSchema } from './utils/schemaValidator';
+import { describeResponse } from './utils/testHelpers';
 import { CreateUserEndpoint } from './user/createUser';
 import { CreateUsersWithListInputEndpoint } from './user/createUsersWithListInput';
 import { LoginUserEndpoint } from './user/loginUser';
@@ -23,7 +24,7 @@ test.describe('User API — happy path', () => {
     const username = uniqueUsername(userData.validUser.username);
     const response = await createUser.send({ ...userData.validUser, username });
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
 
     const { valid, errors } = validateSchema('User', body);
@@ -35,7 +36,7 @@ test.describe('User API — happy path', () => {
     const users = userData.userList.map((user) => ({ ...user, username: uniqueUsername(user.username) }));
     const response = await createUsersWithListInput.send(users);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 
   test('loginUser logs in with valid credentials and returns a session token', async ({ request }) => {
@@ -46,7 +47,7 @@ test.describe('User API — happy path', () => {
     await createUser.send({ ...userData.validUser, username });
     const response = await loginUser.send(username, userData.validUser.password);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.text();
     expect(body.length).toBeGreaterThan(0);
   });
@@ -54,7 +55,7 @@ test.describe('User API — happy path', () => {
   test('logoutUser logs out the current session', async ({ request }) => {
     const logoutUser = new LogoutUserEndpoint(request);
     const response = await logoutUser.send();
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 
   test('getUserByName returns the created user matching the User schema', async ({ request }) => {
@@ -65,7 +66,7 @@ test.describe('User API — happy path', () => {
     await createUser.send({ ...userData.validUser, username });
     const response = await getUserByName.send(username);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
     expect(body.username).toBe(username);
 
@@ -81,7 +82,7 @@ test.describe('User API — happy path', () => {
     await createUser.send({ ...userData.validUser, username });
     const response = await updateUser.send(username, { ...userData.validUserUpdate, username });
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 
   test('deleteUser removes an existing user', async ({ request }) => {
@@ -92,7 +93,7 @@ test.describe('User API — happy path', () => {
     await createUser.send({ ...userData.validUser, username });
     const response = await deleteUser.send(username);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 });
 
