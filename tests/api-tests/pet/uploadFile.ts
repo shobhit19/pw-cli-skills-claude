@@ -13,7 +13,7 @@ export class UploadFileEndpoint extends BaseApi {
     additionalMetadata?: string,
     options: { auth?: boolean } = { auth: true },
   ): Promise<APIResponse> {
-    return this.request.post(`/pet/${petId}/uploadImage`, {
+    return this.request.post(`pet/${petId}/uploadImage`, {
       params: additionalMetadata ? { additionalMetadata } : {},
       headers: {
         'Content-Type': 'application/octet-stream',

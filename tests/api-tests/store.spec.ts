@@ -2,6 +2,7 @@
 import { test, expect } from '@playwright/test';
 import orderData from '../api-data/order-data.json';
 import { validateSchema } from './utils/schemaValidator';
+import { describeResponse } from './utils/testHelpers';
 import { GetInventoryEndpoint } from './store/getInventory';
 import { PlaceOrderEndpoint } from './store/placeOrder';
 import { GetOrderByIdEndpoint } from './store/getOrderById';
@@ -12,7 +13,7 @@ test.describe('Store API — happy path', () => {
     const getInventory = new GetInventoryEndpoint(request);
     const response = await getInventory.send();
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
     expect(typeof body).toBe('object');
   });
@@ -21,7 +22,7 @@ test.describe('Store API — happy path', () => {
     const placeOrder = new PlaceOrderEndpoint(request);
     const response = await placeOrder.send(orderData.validOrder);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
     expect(body.petId).toBe(orderData.validOrder.petId);
 
@@ -33,7 +34,7 @@ test.describe('Store API — happy path', () => {
     const getOrderById = new GetOrderByIdEndpoint(request);
     const response = await getOrderById.send(orderData.getOrderByIdBoundaries.validLowBoundary);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
     const body = await response.json();
 
     const { valid, errors } = validateSchema('Order', body);
@@ -44,7 +45,7 @@ test.describe('Store API — happy path', () => {
     const deleteOrder = new DeleteOrderEndpoint(request);
     const response = await deleteOrder.send(orderData.deleteOrderBoundaries.validBelow1000);
 
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 });
 
@@ -52,13 +53,13 @@ test.describe('Store API — boundary: getOrderById quirk (IDs <=5 or >10 succee
   test(`orderId ${orderData.getOrderByIdBoundaries.validLowBoundary} (<=5) succeeds`, async ({ request }) => {
     const getOrderById = new GetOrderByIdEndpoint(request);
     const response = await getOrderById.send(orderData.getOrderByIdBoundaries.validLowBoundary);
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 
   test(`orderId ${orderData.getOrderByIdBoundaries.validHighBoundary} (>10) succeeds`, async ({ request }) => {
     const getOrderById = new GetOrderByIdEndpoint(request);
     const response = await getOrderById.send(orderData.getOrderByIdBoundaries.validHighBoundary);
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 
   test(`orderId ${orderData.getOrderByIdBoundaries.invalidJustAboveLow} (6-10 range) fails`, async ({ request }) => {
@@ -78,7 +79,7 @@ test.describe('Store API — boundary: deleteOrder quirk (IDs <1000 succeed, abo
   test(`orderId ${orderData.deleteOrderBoundaries.validBelow1000} (<1000) succeeds`, async ({ request }) => {
     const deleteOrder = new DeleteOrderEndpoint(request);
     const response = await deleteOrder.send(orderData.deleteOrderBoundaries.validBelow1000);
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 
   test(`orderId ${orderData.deleteOrderBoundaries.invalidAbove1000} (>1000) fails`, async ({ request }) => {
@@ -115,6 +116,6 @@ test.describe('Store API — negative cases', () => {
   }) => {
     const getInventory = new GetInventoryEndpoint(request);
     const response = await getInventory.send({ auth: false });
-    expect(response.ok()).toBeTruthy();
+    expect(response.ok(), await describeResponse(response)).toBeTruthy();
   });
 });

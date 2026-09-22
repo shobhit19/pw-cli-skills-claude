@@ -9,6 +9,6 @@ export class PlaceOrderEndpoint extends BaseApi {
   }
 
   async send(order: Partial<Order>): Promise<APIResponse> {
-    return this.request.post('/store/order', { data: order });
+    return this.request.post('store/order', { data: order });
   }
 }

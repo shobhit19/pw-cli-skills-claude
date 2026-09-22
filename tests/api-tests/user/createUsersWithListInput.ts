@@ -9,6 +9,6 @@ export class CreateUsersWithListInputEndpoint extends BaseApi {
   }
 
   async send(users: Partial<User>[]): Promise<APIResponse> {
-    return this.request.post('/user/createWithList', { data: users });
+    return this.request.post('user/createWithList', { data: users });
   }
 }

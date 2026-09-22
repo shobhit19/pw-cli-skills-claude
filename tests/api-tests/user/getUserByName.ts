@@ -8,6 +8,6 @@ export class GetUserByNameEndpoint extends BaseApi {
   }
 
   async send(username: string): Promise<APIResponse> {
-    return this.request.get(`/user/${username}`);
+    return this.request.get(`user/${username}`);
   }
 }

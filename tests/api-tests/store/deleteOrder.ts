@@ -10,6 +10,6 @@ export class DeleteOrderEndpoint extends BaseApi {
   }
 
   async send(orderId: number | string): Promise<APIResponse> {
-    return this.request.delete(`/store/order/${orderId}`);
+    return this.request.delete(`store/order/${orderId}`);
   }
 }
