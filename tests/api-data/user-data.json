@@ -1,0 +1,45 @@
+{
+  "validUser": {
+    "id": 10,
+    "username": "qa_automation_user",
+    "firstName": "John",
+    "lastName": "James",
+    "email": "qa.automation.user@example.com",
+    "password": "Sup3rSecret!",
+    "phone": "555-0100",
+    "userStatus": 1
+  },
+  "validUserUpdate": {
+    "id": 10,
+    "username": "qa_automation_user",
+    "firstName": "Jane",
+    "lastName": "James",
+    "email": "qa.automation.user.updated@example.com",
+    "password": "Sup3rSecret!Updated",
+    "phone": "555-0101",
+    "userStatus": 1
+  },
+  "userList": [
+    {
+      "id": 11,
+      "username": "qa_automation_user_list_1",
+      "firstName": "Alice",
+      "lastName": "Smith",
+      "email": "alice.smith@example.com",
+      "password": "Sup3rSecret!1",
+      "phone": "555-0102",
+      "userStatus": 1
+    },
+    {
+      "id": 12,
+      "username": "qa_automation_user_list_2",
+      "firstName": "Bob",
+      "lastName": "Stone",
+      "email": "bob.stone@example.com",
+      "password": "Sup3rSecret!2",
+      "phone": "555-0103",
+      "userStatus": 1
+    }
+  ],
+  "nonExistentUsername": "qa_automation_user_does_not_exist"
+}
