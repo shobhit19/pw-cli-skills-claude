@@ -10,6 +10,8 @@ into the plan → generate → heal workflow that already exists in
 - `jira/tickets/` — one file per Jira ticket: a verbatim copy of the ticket's test case content
   (title, preconditions, steps, expected results), kept for traceability between the Jira ticket
   and the generated spec/tests.
+- `jira/prompts.md` — standard, reusable prompts for fetching a ticket's test cases and turning
+  them into a generated test script.
 - `jira/README.md` — this file.
 
 ## Workflow
