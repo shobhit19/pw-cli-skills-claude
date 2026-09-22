@@ -83,3 +83,25 @@ jobs:
           name: api-test-report
           path: playwright-report/
           retention-days: 7
+
+  tests-gate:
+    name: Tests Gate (UI or API)
+    # Runs after both suites regardless of whether they passed (`if: always()`),
+    # then passes as long as at least ONE of them succeeded. ui-tests/api-tests
+    # still show their own individual pass/fail for visibility, but this job
+    # (together with build) is the one branch protection should require —
+    # see .github/workflows/README.md.
+    needs: [ui-tests, api-tests]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require at least one test suite to have passed
+        run: |
+          echo "UI Tests result:  ${{ needs.ui-tests.result }}"
+          echo "API Tests result: ${{ needs.api-tests.result }}"
+          if [ "${{ needs.ui-tests.result }}" = "success" ] || [ "${{ needs.api-tests.result }}" = "success" ]; then
+            echo "At least one test suite passed."
+            exit 0
+          fi
+          echo "Both UI Tests and API Tests failed."
+          exit 1

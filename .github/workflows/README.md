@@ -1,7 +1,7 @@
 # CI/CD Pipeline — PR Test Pipeline
 
 A basic GitHub Actions pipeline for this POC. It runs automatically on every pull request and
-gates merging on all three stages passing.
+gates merging on `build` passing AND **at least one** of `ui-tests` / `api-tests` passing.
 
 ## What it does
 
@@ -13,15 +13,30 @@ gates merging on all three stages passing.
 |---|---|---|
 | **build** | Installs dependencies and type-checks the whole TypeScript codebase (no output files — just catches type errors) | `npm run build` (→ `tsc --noEmit`) |
 | **ui-tests** | Installs the Chromium browser and runs the UI test suite against Saucedemo | `npm run test:ui` (→ `playwright test --project=ui`) |
-| **api-tests** | Runs the API test suite against the live Petstore sandbox (no browser needed) | `npm run test:api` (→ `playwright test --project=api`) |
+| **api-tests** | Runs the API test suite against the live Petstore sandbox (no browser needed) | `npm run test:api` (→ `playwright test --project=api --workers=1`) |
+| **tests-gate** | Passes if `ui-tests` **or** `api-tests` succeeded; fails only if both failed | inline shell check against `needs.*.result` |
 
 `ui-tests` and `api-tests` both **depend on `build`** (`needs: build`) — if the code doesn't
 compile, neither test stage runs. `ui-tests` and `api-tests` run in parallel with each other once
-`build` succeeds.
+`build` succeeds. `tests-gate` runs after both (`needs: [ui-tests, api-tests]`, `if: always()` so
+it still runs even if one or both failed) and is the actual merge gate for the test stages — see
+**Why an OR gate** below.
 
 If a test stage fails, its Playwright HTML report is uploaded as a downloadable artifact on the
 workflow run page (`ui-test-report` / `api-test-report`), so you don't need to reproduce the
 failure locally just to see what broke.
+
+## Why an OR gate
+
+`api-tests` runs against `petstore3.swagger.io`, a shared public demo server — not a backend this
+project controls. It can be genuinely down or erroring for reasons that have nothing to do with
+the code in a given PR. Requiring both suites to pass (AND) would let an unrelated outage on that
+public sandbox block every PR indefinitely. Requiring `ui-tests` OR `api-tests` (`tests-gate`)
+means a PR can still merge on a solid UI test pass even if the public API sandbox is having a bad
+day, while `build` and at least one full test suite passing are still non-negotiable — this is
+strictly for the POC's dependency on an external demo server the team doesn't own, not a general
+excuse to ignore a suite's failures. Once a dedicated/mocked API test target exists, switch back to
+requiring both suites individually.
 
 ## File
 
@@ -38,13 +53,15 @@ One-time setup, done by a repo admin:
 2. Under **Branch protection rules**, click **Add rule** (or edit the existing rule for `master`).
 3. Set **Branch name pattern** to `master`.
 4. Enable **Require status checks to pass before merging**.
-5. Search for and select the three job names: **Build (compile)**, **UI Tests**, **API Tests**.
-   (They only appear in this list after the workflow has run at least once — open the PR first so
-   GitHub Actions picks up the workflow, then come back to this step.)
+5. Search for and select **two** checks: **Build (compile)** and **Tests Gate (UI or API)**.
+   Do **not** also select "UI Tests" / "API Tests" individually — those are allowed to show red
+   without blocking the merge, as long as `Tests Gate` is green (see **Why an OR gate** above).
+   (Checks only appear in this list after the workflow has run at least once — open the PR first
+   so GitHub Actions picks up the workflow, then come back to this step.)
 6. Save the rule.
 
-After that, GitHub will show these three checks on every PR and block the merge button until all
-three are green.
+After that, GitHub will show all four checks on every PR (`Build`, `UI Tests`, `API Tests`,
+`Tests Gate`), but only `Build` and `Tests Gate` block the merge button.
 
 ## Running the same checks locally
 
