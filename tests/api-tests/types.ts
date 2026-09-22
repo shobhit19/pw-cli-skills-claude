@@ -18,7 +18,10 @@ export interface Pet {
   category?: Category;
   photoUrls: string[];
   tags?: Tag[];
-  status?: PetStatus;
+  // (string & {}) keeps IDE autocomplete for the documented enum values while still
+  // accepting the plain `string` type TS infers for values pulled from JSON test data
+  // (including intentionally invalid values used in negative tests).
+  status?: PetStatus | (string & {});
 }
 
 export type OrderStatus = 'placed' | 'approved' | 'delivered';
@@ -28,7 +31,7 @@ export interface Order {
   petId?: number;
   quantity?: number;
   shipDate?: string;
-  status?: OrderStatus;
+  status?: OrderStatus | (string & {});
   complete?: boolean;
 }
 

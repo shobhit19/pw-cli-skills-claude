@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc --noEmit",
+    "test:ui": "playwright test --project=ui",
+    "test:api": "playwright test --project=api"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +15,9 @@
   "devDependencies": {
     "@playwright/test": "^1.63.0",
     "@types/js-yaml": "^4.0.9",
+    "@types/node": "^26.6.2",
     "ajv": "^8.20.0",
-    "js-yaml": "^5.4.2"
+    "js-yaml": "^5.4.2",
+    "typescript": "^7.0.2"
   }
 }
