@@ -20,6 +20,11 @@ export default defineConfig({
     {
       name: 'api',
       testDir: './tests/api-tests',
+      // petstore3.swagger.io is a shared public demo, not a dedicated test
+      // backend — a full-parallel burst of requests against it produces
+      // spurious 500s. Running tests within each file sequentially (paired
+      // with --workers=1 in the test:api script) keeps load on it low.
+      fullyParallel: false,
       use: {
         // Trailing slash matters: endpoint classes use relative paths with no
         // leading slash (e.g. request.get('pet/1')) so they resolve under

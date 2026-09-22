@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc --noEmit",
     "test:ui": "playwright test --project=ui",
-    "test:api": "playwright test --project=api"
+    "test:api": "playwright test --project=api --workers=1"
   },
   "keywords": [],
   "author": "",
